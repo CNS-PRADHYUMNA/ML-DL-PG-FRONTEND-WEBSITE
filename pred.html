@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediction Page</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Libre+Baskerville"
+    />
+    <style>
+      body {
+        background: url("https://images.unsplash.com/photo-1587131777396-3780a9cdc4f4?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+          center center fixed;
+        background-size: cover;
+        background-color: #f0f0f0;
+      }
+      nav a {
+        font-family: "Libre Baskerville", serif;
+        font-size: 1.85em;
+        font-weight: bolder;
+        display: inline-block;
+        color: rgb(0, 0, 0);
+        text-align: center;
+        text-decoration: none;
+        border-radius: 50%;
+        padding: 10px;
+        transition: 0.8s;
+      }
+
+      /* Change color on hover */
+      nav a:hover {
+        margin: 10px;
+        transform: scale(1, 1);
+        font-size: 2em;
+        background-color: rgb(230, 214, 144);
+      }
+
+      table {
+        width: 45%;
+        margin: 10px auto;
+        background-color: rgb(68, 66, 66);
+        border-collapse: collapse;
+        border: 8px solid #333;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        font-weight: bolder;
+        font-size: 1.2em;
+        color: white;
+        border: 8px solid #000000;
+        padding: 8px;
+        text-align: center;
+      }
+
+      th {
+        background-color: #fafafa;
+        color: rgb(0, 0, 0);
+      }
+
+      .cen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      label {
+        font-size: 1.2em;
+        margin-right: 10px;
+      }
+
+      #genotypeInput {
+        font-size: 1em;
+        padding: 8px;
+        width: 450px;
+      }
+
+      #submitBtn {
+        font-size: 1.5em;
+        padding: 8px;
+        background-color: #333;
+        color: white;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: 0.8s;
+      }
+
+      .chars {
+        font-size: 2em;
+        font-family: "Libre Baskerville", serif;
+      }
+      .spice {
+        padding: 30px;
+      }
+      .table {
+        padding: 45px;
+      }
+      .scroll {
+        width: 80%;
+        margin: 0 auto;
+      }
+      .navi a {
+        padding: 50px;
+      }
+    </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div id="scroll">
+      <center class="pal">
+        <header>
+          <nav class="navi">
+            <a href="home.html">Home</a> <a href="snp.html">SNP-info</a
+            ><a href="pred.html">Prediction Page</a>
+          </nav>
+        </header>
+      </center>
+      <center class="cen">
+        <h2
+          style="
+            text-align: center;
+            color: #000000;
+            font-size: 3em;
+            font-family: Libre Baskerville, serif;
+          "
+        >
+          <i> Your Prediction!!!</i>
+        </h2>
+      </center>
+      <div class="spice">
+        <center>
+          <label for="genotypeInput" class="chars"
+            >Basic meaning of ATGC: <br />A - Adenine <br />
+            T - Thymine <br />G - Guanine <br />C - Cytosine <br />
+            <br />
+            Enter Allele Sequence (Double Haploid) <br />
+            <br /><br />
+            Enter the input below:
+          </label>
+          <br />
+          <br />
+
+          <input type="text" id="genotypeInput" maxlength="48" />
+          <button id="submitBtn" onclick="submitGenotype()">Submit</button>
+        </center>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Trait 🧬</th>
+            <th>Prediction🌾</th>
+          </tr>
+        </thead>
+        <tbody id="predictionTableBody"></tbody>
+
+        <script>
+          function submitGenotype() {
+            var genotypeInput = document.getElementById("genotypeInput").value;
+
+            // Validate input length
+            if (genotypeInput.length !== 48) {
+              alert("Please enter exactly 48 characters.");
+              return;
+            }
+
+            // Validate input characters
+            var validCharacters = /^[ATGCatgc]*$/;
+            if (!validCharacters.test(genotypeInput)) {
+              alert("Invalid characters. Please use only A, T, G, C.");
+              return;
+            }
+
+            // Map genotype to numbers
+            var genoMap = {
+              AA: 1,
+              AT: 2,
+              AG: 3,
+              AC: 4,
+              TT: 5,
+              TG: 6,
+              TC: 7,
+              GG: 8,
+              CG: 9,
+              CC: 10,
+            };
+
+            // Convert genotype to numbers
+            var numericGenotype = [];
+            for (var i = 0; i < genotypeInput.length; i += 2) {
+              var pair = genotypeInput.slice(i, i + 2).toUpperCase();
+              numericGenotype.push(genoMap[pair]);
+            }
+
+            // Send the numeric genotype array to the backend
+            fetch("https://cnspradhyumna.pythonanywhere.com/predict", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ ip: numericGenotype }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // Check if the "preds" key exists
+                if (data && data.preds) {
+                  var predictionResult = data.preds;
+                  var staticTraits = [
+                    "(DH) Days to Heading (days)",
+                    "(GFD) Grain Filling Duration (days)",
+                    "(GNPS) Grain Number per Spike (Count)",
+                    "(GWPS) Grain Weight per Spike (gms)",
+                    "(PH) Plant Height (meters)",
+                    "(GY) Grain Yield (kg or gms/ha)",
+                  ];
+
+                  // Update the table with prediction data
+                  var predictionTableBody = document.getElementById(
+                    "predictionTableBody"
+                  );
+                  predictionTableBody.innerHTML = ""; // Clear previous rows
+
+                  for (var i = 0; i < predictionResult.length; i++) {
+                    var row = predictionTableBody.insertRow();
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    cell1.innerHTML = staticTraits[i];
+                    cell2.innerHTML = predictionResult[i].toFixed(2);
+                  }
+                } else {
+                  // Handle the case when "preds" key is missing in the response
+                  console.error(
+                    "Invalid response format. Missing 'preds' key."
+                  );
+                }
+              })
+              .catch((error) =>
+                console.error("Error fetching predictions:", error)
+              );
+          }
+        </script>
+      </table>
+    </div>
+  </body>
+</html>
