@@ -10,36 +10,33 @@
     />
     <style>
       body {
-        background: url("https://images.unsplash.com/photo-1587131777396-3780a9cdc4f4?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+        background: url("https://images.unsplash.com/photo-1610738676109-e33656683023?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
           center center fixed;
         background-size: cover;
         background-color: #f0f0f0;
       }
       nav a {
         font-family: "Libre Baskerville", serif;
-        font-size: 1.85em;
+        font-size: 2em;
         font-weight: bolder;
         display: inline-block;
-        color: rgb(0, 0, 0);
+        color: black;
         text-align: center;
         text-decoration: none;
-        border-radius: 50%;
-        padding: 10px;
-        transition: 0.8s;
+        border-radius: 50px;
+        padding: 15px;
       }
 
       /* Change color on hover */
       nav a:hover {
-        margin: 10px;
-        transform: scale(1, 1);
-        font-size: 2em;
-        background-color: rgb(230, 214, 144);
+        background-color: white;
+        color: black;
       }
 
       table {
         width: 45%;
         margin: 10px auto;
-        background-color: rgb(68, 66, 66);
+        background-color: white;
         border-collapse: collapse;
         border: 8px solid #333;
         border-radius: 16px;
@@ -48,17 +45,14 @@
 
       th,
       td {
-        font-weight: bolder;
-        font-size: 1.2em;
-        color: white;
-        border: 8px solid #000000;
+        border: 8px solid #ddd;
         padding: 8px;
         text-align: center;
       }
 
       th {
-        background-color: #fafafa;
-        color: rgb(0, 0, 0);
+        background-color: #333;
+        color: white;
       }
 
       .cen {
@@ -66,6 +60,11 @@
         justify-content: center;
         align-items: center;
       }
+      .pal {
+        padding: 20px;
+      }
+
+      /* Style for input and button */
       label {
         font-size: 1.2em;
         margin-right: 10px;
@@ -78,15 +77,14 @@
       }
 
       #submitBtn {
-        font-size: 1.5em;
+        font-size: 1em;
         padding: 8px;
         background-color: #333;
         color: white;
-        border-radius: 15px;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
-        transition: 0.8s;
       }
-
       .chars {
         font-size: 2em;
         font-family: "Libre Baskerville", serif;
@@ -101,20 +99,13 @@
         width: 80%;
         margin: 0 auto;
       }
-      .navi a {
-        padding: 50px;
-      }
     </style>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
     <div id="scroll">
       <center class="pal">
         <header>
-          <nav class="navi">
+          <nav>
             <a href="home.html">Home</a> <a href="snp.html">SNP-info</a
             ><a href="pred.html">Prediction Page</a>
           </nav>
@@ -137,8 +128,8 @@
           <label for="genotypeInput" class="chars"
             >Basic meaning of ATGC: <br />A - Adenine <br />
             T - Thymine <br />G - Guanine <br />C - Cytosine <br />
-            <br />
-            Enter Allele Sequence (Double Haploid) <br />
+            1) Enter only meaningful alphabets {A,T,G,C} <br />
+            2) Maintain the relative Order Enter 48 characters (ATGC):
             <br /><br />
             Enter the input below:
           </label>
@@ -153,8 +144,8 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Trait 🧬</th>
-            <th>Prediction🌾</th>
+            <th>Trait</th>
+            <th>Prediction</th>
           </tr>
         </thead>
         <tbody id="predictionTableBody"></tbody>
@@ -211,12 +202,12 @@
                 if (data && data.preds) {
                   var predictionResult = data.preds;
                   var staticTraits = [
-                    "(DH) Days to Heading (days)",
-                    "(GFD) Grain Filling Duration (days)",
-                    "(GNPS) Grain Number per Spike (Count)",
-                    "(GWPS) Grain Weight per Spike (gms)",
-                    "(PH) Plant Height (meters)",
-                    "(GY) Grain Yield (kg or gms/ha)",
+                    "Days to Heading (DH)",
+                    "Grain Filling Duration (GFD)",
+                    "Grain Number per Spike (GNPS)",
+                    "Grain Weight per Spike (GWPS)",
+                    "Plant Height (PH)",
+                    "Grain Yield (GY)",
                   ];
 
                   // Update the table with prediction data
